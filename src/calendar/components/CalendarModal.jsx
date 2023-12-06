@@ -10,6 +10,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import Swal from "sweetalert2";
 import "sweetalert2/dist/sweetalert2.css";
+import { useUiStore } from "../../hooks/useUiStore";
 
 registerLocale("es", es);
 
@@ -27,7 +28,7 @@ const customStyles = {
 Modal.setAppElement("#root");
 
 export const CalendarModal = () => {
-  const [isOpen, setIsOpen] = useState(true);
+  const { isDateModalOpen, closeDateModal } = useUiStore();
 
   const formData = {
     title: "Florencia Luz",
@@ -52,10 +53,6 @@ export const CalendarModal = () => {
     });
   };
 
-  const handleCloseModal = () => {
-    setIsOpen(false);
-  };
-
   const handleFormSubmit = (event) => {
     event.preventDefault();
 
@@ -74,14 +71,12 @@ export const CalendarModal = () => {
       );
       return;
     }
-
-    setIsOpen(false);
   };
 
   return (
     <Modal
-      isOpen={isOpen}
-      onRequestClose={handleCloseModal}
+      isOpen={isDateModalOpen}
+      onRequestClose={closeDateModal}
       style={customStyles}
       className="modal"
       overlayClassName="modal-fondo"

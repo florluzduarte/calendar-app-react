@@ -5,6 +5,7 @@ import { addHours } from "date-fns";
 import { CalendarEventBox, CalendarModal, Navbar } from "../";
 import { getMessagesES, localizer } from "../../helpers";
 import { useState } from "react";
+import { useUiStore } from "../../hooks/useUiStore";
 
 const events = [
   {
@@ -21,6 +22,7 @@ const events = [
 ];
 
 export const CalendarPage = () => {
+  const { openDateModal } = useUiStore();
   const defaultViewInitialState = localStorage.getItem("lastView") || "week";
   const [defaultView, setDefaultView] = useState(defaultViewInitialState);
 
@@ -28,8 +30,8 @@ export const CalendarPage = () => {
     console.log({ click: event });
   };
 
-  const handleEventDoubleClick = (event) => {
-    console.log({ doubleClick: event });
+  const handleEventDoubleClick = () => {
+    openDateModal();
   };
 
   const handleViewChange = (event) => {
