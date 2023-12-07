@@ -38,3 +38,12 @@
   outline: none;
   padding: 10px;
 }
+
+.fab {
+  border-radius: 100%;
+  bottom: 20px;
+  font-size: 25px;
+  padding: 20px;
+  position: fixed;
+  right: 20px;
+}
