@@ -1,23 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { addHours } from "date-fns";
-
-const tempEvent = {
-  _id: new Date().getTime(),
-  title: "Cumpleaños del jefe",
-  notes: "Hay que comprar el regalo",
-  start: new Date(),
-  end: addHours(new Date(), 2),
-  bgColor: "#fafafa",
-  user: {
-    _id: "123",
-    name: "Florencia",
-  },
-};
 
 export const calendarSlice = createSlice({
   name: "calendar",
   initialState: {
-    events: [tempEvent],
+    isLoadingEvents: true,
+    events: [],
     activeEvent: null,
   },
   reducers: {
@@ -30,7 +17,7 @@ export const calendarSlice = createSlice({
     },
     handleEventUpdate: (state, action) => {
       state.events = state.events.map((calendarEvent) => {
-        if (calendarEvent._id === action.payload._id) {
+        if (calendarEvent.id === action.payload.id) {
           return action.payload;
         }
         return calendarEvent;
@@ -39,18 +26,34 @@ export const calendarSlice = createSlice({
     handleEventDelete: (state) => {
       if (state.activeEvent) {
         state.events = state.events.filter(
-          (event) => event._id !== state.activeEvent._id
+          (event) => event.id !== state.activeEvent.id
         );
         state.activeEvent = null;
       }
+    },
+    handleLoadEvents: (state, { payload = [] }) => {
+      state.isLoadingEvents = false;
+      payload.forEach((event) => {
+        const exists = state.events.some((dbEvent) => dbEvent.id === event.id);
+        if (!exists) {
+          state.events.push(event);
+        }
+      });
+    },
+    handleLogoutCalendar: (state) => {
+      state.isLoadingEvents = true;
+      state.events = [];
+      state.activeEvent = null;
     },
   },
 });
 
 // Action creators are generated for each case reducer function
 export const {
-  handleSetActiveEvent,
   handleAddNewEvent,
-  handleEventUpdate,
   handleEventDelete,
+  handleEventUpdate,
+  handleLoadEvents,
+  handleLogoutCalendar,
+  handleSetActiveEvent,
 } = calendarSlice.actions;
